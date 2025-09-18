@@ -6,7 +6,7 @@ function App() {
 
   useEffect(() => {
     // call api
-    fetch("/api/hello")
+    fetch("http://localhost:5000/api/hi")
       .then((res) => {
         // convert to json format
         return res.json();
@@ -17,22 +17,34 @@ function App() {
       });
   }, []);
 
-  // ฟีเจอร์ใหม่: เรียก /api/env
-  const [env, setEnv] = useState(null);
-  const handleCheckEnv = async () => {
-    const res = await fetch('/api/env');
+  // ฟีเจอร์ใหม่: เรียก /api/time
+  const [timeInfo, setTimeInfo] = useState(null);
+  const handleCheckTime = async () => {
+    const res = await fetch("/api/time");
     const data = await res.json();
-    setEnv(data);
+    setTimeInfo(data);
   };
 
   return (
     <>
       <h1>{text}</h1>
-      <button onClick={handleCheckEnv}>ตรวจสอบ Environment</button>
-      {env && (
-        <div style={{marginTop: '1rem'}}>
-          <h2>Environment Info</h2>
-          <pre>{JSON.stringify(env, null, 2)}</pre>
+      <button className="timezone-btn" onClick={handleCheckTime}>
+        Timezone in Server
+      </button>
+      {timeInfo && (
+        <div style={{ marginTop: "1rem" }}>
+          <h2>Server Time Info</h2>
+          <ul style={{ textAlign: "left", display: "inline-block" }}>
+            <li>
+              <b>Timestamp:</b> {timeInfo.timestamp}
+            </li>
+            <li>
+              <b>ISO Time:</b> {timeInfo.iso}
+            </li>
+            <li>
+              <b>Timezone:</b> {timeInfo.timezone}
+            </li>
+          </ul>
         </div>
       )}
     </>

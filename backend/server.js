@@ -9,17 +9,26 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello World from server" });
+app.get("/api/hi", (req, res) => {
+  res.json({ message: "Hi, This is new feature" });
 });
 
-// Endpoint สำหรับตรวจสอบ environment
-app.get("/api/env", (req, res) => {
+// ฟีเจอร์ใหม่: คืนเวลาปัจจุบันและ timezone
+app.get("/api/time", (req, res) => {
+  const now = new Date();
+  const pad = (n) => n.toString().padStart(2, "0");
+  const timeString = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(
+    now.getSeconds()
+  )}`;
+  const dateString = `${pad(now.getDate())}/${pad(
+    now.getMonth() + 1
+  )}/${now.getFullYear()}`;
   res.json({
-    node_env: process.env.NODE_ENV || "development",
-    port: PORT,
-    platform: process.platform,
-    time: new Date().toISOString(),
+    timestamp: now.getTime(),
+    iso: now.toISOString(),
+    time: timeString,
+    date: dateString,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   });
 });
 

@@ -9,6 +9,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/api", (req, res) => {
+  res.json({ message: "Welcome! This is your custom API endpoint." });
+});
+
 app.get("/api/hi", (req, res) => {
   res.json({ message: "Hi, This is new feature" });
 });

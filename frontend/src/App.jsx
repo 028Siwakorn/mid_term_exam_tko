@@ -4,9 +4,12 @@ import "./App.css";
 function App() {
   const [text, setText] = useState();
 
+  // Define API base URL based on environment
+  const API_BASE_URL = import.meta.env.PROD ? import.meta.env.VITE_API_URL : ""; // Empty string uses the proxy in development
+
   useEffect(() => {
-    // call api
-    fetch("http://localhost:5000/api/hi")
+    // call api - Updated to use environment variable
+    fetch(`${API_BASE_URL}/api/hi`)
       .then((res) => {
         // convert to json format
         return res.json();
@@ -14,15 +17,22 @@ function App() {
       .then((resp) => {
         console.log(resp.message);
         setText(resp.message);
+      })
+      .catch((error) => {
+        console.error("Error fetching /api/hi:", error);
       });
   }, []);
 
   // ฟีเจอร์ใหม่: เรียก /api/time
   const [timeInfo, setTimeInfo] = useState(null);
   const handleCheckTime = async () => {
-    const res = await fetch("/api/time");
-    const data = await res.json();
-    setTimeInfo(data);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/time`);
+      const data = await res.json();
+      setTimeInfo(data);
+    } catch (error) {
+      console.error("Error fetching /api/time:", error);
+    }
   };
 
   return (
